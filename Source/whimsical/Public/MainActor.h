@@ -7,8 +7,9 @@
 UCLASS() class WHIMSICAL_API AMainActor : public AActor {
 	GENERATED_BODY()
 public:
-	AMainActor();
     UPROPERTY(EditAnywhere, Category = "Camera") AActor* TargetCamera;
+
+	AMainActor();
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override; };
 

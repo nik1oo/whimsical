@@ -1,10 +1,14 @@
 #include "MouseGrabPawn.h"
+#include "State.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "GameFramework/Actor.h"
 
 
 AMouseGrabPawn::AMouseGrabPawn() {
 	PrimaryActorTick.bCanEverTick = true;
+	UState* State = ActorGetState(this);
+	if (State) { UE_LOG(LogTemp, Display, TEXT("Player Name: %s"), *State->PlayerName); }
 /*	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = RootScene;
 	StaticCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("StaticCamera"));

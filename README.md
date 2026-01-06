@@ -1,7 +1,4 @@
 
-# TECHNOLOGY
- * Odin for language.
- * Vulkan for rendering.
- * Box2D for physics.
- * Stylized shading techniques.
- * Inky for story.
+![screenshot](screenshot.png)
+
+A candy-shop management game for Glam Jam 2.
