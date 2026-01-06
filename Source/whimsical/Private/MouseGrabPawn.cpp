@@ -12,16 +12,16 @@ AMouseGrabPawn::AMouseGrabPawn() {
 /*	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = RootScene;
 	StaticCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("StaticCamera"));
-	StaticCamera->SetupAttachment(RootScene);
+	StaticCamera->SetupAttachment(RootScene);*/
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
-	bShowMouseCursor = true;
+/*	bShowMouseCursor = true;
 	bEnableClickEvents = true;
 	bEnableMouseOverEvents = true; */}
 
 
 void AMouseGrabPawn::BeginPlay() {
 	Super::BeginPlay();
-/*	PhysicsHandle->GrabStrength = GrabStrength;
+/*	PhysicsHandle->GrabStrength = 1000.0;
 	if (APlayerController* PC = GetController<APlayerController>()) {
 		PC->bShowMouseCursor = true;
 		PC->bEnableClickEvents = true;
@@ -29,15 +29,22 @@ void AMouseGrabPawn::BeginPlay() {
 
 
 void AMouseGrabPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
+	UE_LOG(LogTemp, Display, TEXT("FUCKCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"));
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-/*	PlayerInputComponent->BindAction("Grab", IE_Pressed, this, &AMouseGrabPawn::OnMousePressed);
-	PlayerInputComponent->BindAction("Grab", IE_Released, this, &AMouseGrabPawn::OnMouseReleased); */}
+	PlayerInputComponent->BindAction("Grab", IE_Pressed, this, &AMouseGrabPawn::OnMousePressed);
+	PlayerInputComponent->BindAction("Grab", IE_Released, this, &AMouseGrabPawn::OnMouseReleased); }
 
 
 void AMouseGrabPawn::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
-/*	if (PhysicsHandle->GetGrabbedComponent()) {
-		UpdateDragTarget(); } */}
+	if ((GrabbedComponent = PhysicsHandle->GetGrabbedComponent()) != nullptr) {
+/*	if (GrabbedComponent != nullptr) {
+		FVector WorldPos, WorldDir;
+		if (!GetMouseWorldPosition(DragPlaneDistance, WorldPos, WorldDir)) return;
+		FPlane DragPlane(StaticCamera->GetForwardVector(), DragPlaneOrigin);
+		FVector TargetPoint = FMath::RayPlaneIntersection(WorldPos, WorldDir, DragPlane);
+		PhysicsHandle->SetTargetLocation(TargetPoint);
+		DrawDebugLine(GetWorld(), StaticCamera->GetComponentLocation(), TargetPoint, FColor::Cyan, false, -1.0f, 0, 2.0f);*/ } }
 
 
 bool AMouseGrabPawn::GetMouseWorldPosition(float Distance, FVector& OutWorldPos, FVector& OutWorldDir) {
@@ -51,6 +58,7 @@ bool AMouseGrabPawn::GetMouseWorldPosition(float Distance, FVector& OutWorldPos,
 
 
 void AMouseGrabPawn::OnMousePressed() {
+	UE_LOG(LogTemp, Display, TEXT("Mouse pressed!"));
 /*	APlayerController* PC = Cast<APlayerController>(GetController());
 	if (!PC || !StaticCamera) return;
 	FVector WorldPos, WorldDir;
@@ -73,15 +81,6 @@ void AMouseGrabPawn::OnMousePressed() {
 			GrabbedComponent->GetComponentRotation());
 		GrabbedComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
 		DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 16.0f, 12, FColor::Green, false, 5.0f); } */}
-
-
-void AMouseGrabPawn::UpdateDragTarget() {
-/*	FVector WorldPos, WorldDir;
-	if (!GetMouseWorldPosition(DragPlaneDistance, WorldPos, WorldDir)) return;
-	FPlane DragPlane(StaticCamera->GetForwardVector(), DragPlaneOrigin);
-	FVector TargetPoint = FMath::RayPlaneIntersection(WorldPos, WorldDir, DragPlane);
-	PhysicsHandle->SetTargetLocation(TargetPoint);
-	DrawDebugLine(GetWorld(), StaticCamera->GetComponentLocation(), TargetPoint, FColor::Cyan, false, -1.0f, 0, 2.0f); */}
 
 
 void AMouseGrabPawn::OnMouseReleased() {

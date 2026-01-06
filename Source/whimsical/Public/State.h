@@ -11,8 +11,7 @@ class UGameInstance;
 
 
 UCLASS() class WHIMSICAL_API UState : public UGameInstance {
-	GENERATED_BODY()
-public:
+	GENERATED_BODY() public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State") FString PlayerName = TEXT("DefaultPlayer"); };
 
 

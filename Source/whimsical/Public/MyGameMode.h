@@ -5,10 +5,8 @@
 
 
 UCLASS() class WHIMSICAL_API AMyGameMode : public AGameModeBase {
-	GENERATED_BODY()
-public:
+	GENERATED_BODY() public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) TSubclassOf<APawn> CustomPawnClass;
 
-	AMyGameMode();
-    virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override; };
+	AMyGameMode(); };
 
