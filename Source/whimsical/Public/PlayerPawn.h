@@ -4,10 +4,11 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
-#include "MouseGrabPawn.generated.h"
+#include "MainActor.h"
+#include "PlayerPawn.generated.h"
 
 
-UCLASS() class WHIMSICAL_API AMouseGrabPawn : public APawn {
+UCLASS() class WHIMSICAL_API APlayerPawn : public APawn {
 	GENERATED_BODY() public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)     USceneComponent*         RootScene;
 	UPROPERTY(VisibleAnywhere)                        USpringArmComponent*     SpringArm;
@@ -15,8 +16,11 @@ UCLASS() class WHIMSICAL_API AMouseGrabPawn : public APawn {
 	UPROPERTY(VisibleAnywhere)                        UPhysicsHandleComponent* PhysicsHandle;
 	UPROPERTY(EditAnywhere, Category="Drag Settings") float                    DragPlaneDistance = 500.0;
 	UPROPERTY()                                       UPrimitiveComponent*     GrabbedComponent = nullptr;
+	                                                  AMainActor*              MainActor;
 	                                                  FVector                  DragPlaneOrigin;
-	AMouseGrabPawn();
+	                                                  FVector                  GrabPoint;
+
+	APlayerPawn();
 	void OnMousePressed();
 	void OnMouseReleased();
 	bool GetMouseWorldPosition(float Distance, FVector& OutWorldPos, FVector& OutWorldDir);

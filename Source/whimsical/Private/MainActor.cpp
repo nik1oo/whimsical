@@ -8,11 +8,7 @@ AMainActor::AMainActor() {
 
 
 void AMainActor::BeginPlay() {
-	Super::BeginPlay();
-	if (TargetCamera) {
-		APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		if (PC) {
-			PC->SetViewTargetWithBlend(TargetCamera, 0.0f); } } }
+	Super::BeginPlay(); }
 
 
 void AMainActor::Tick(float DeltaTime) {
