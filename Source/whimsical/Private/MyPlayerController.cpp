@@ -1,9 +1,11 @@
 #include "MyPlayerController.h"
+#include "Game.h"
 #include "Kismet/GameplayStatics.h"
 #include "Camera/CameraActor.h"
 
 
 AMyPlayerController::AMyPlayerController() {
+	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));
 	bShowMouseCursor = true;
 	bEnableClickEvents = true;
 	bEnableMouseOverEvents = true; }

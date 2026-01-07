@@ -1,4 +1,4 @@
-#include "PlayerPawn.h"
+#include "MyPlayerPawn.h"
 #include "Game.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
@@ -6,9 +6,9 @@
 #include "MyPlayerController.h"
 
 
-APlayerPawn::APlayerPawn() {
+AMyPlayerPawn::AMyPlayerPawn() {
+	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));
 	PrimaryActorTick.bCanEverTick = true;
-	UGame* Game = ActorGetGame(this);
 	if (Game) { UE_LOG(LogTemp, Display, TEXT("Player Name: %s"), *Game->PlayerName); }
 /*	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = RootScene;
@@ -17,9 +17,8 @@ APlayerPawn::APlayerPawn() {
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle")); }
 
 
-void APlayerPawn::BeginPlay() {
+void AMyPlayerPawn::BeginPlay() {
 	Super::BeginPlay();
-	MainActor = Cast<AMainActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AMainActor::StaticClass()));
 /*	PhysicsHandle->GrabStrength = 1000.0;
 	if (APlayerController* PC = GetController<APlayerController>()) {
 		PC->bShowMouseCursor = true;
@@ -27,14 +26,14 @@ void APlayerPawn::BeginPlay() {
 		PC->bEnableMouseOverEvents = true; } */}
 
 
-void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
+void AMyPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	UE_LOG(LogTemp, Display, TEXT("SETTING UP PLAYER INPUT COMPONENT."));
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Grab", IE_Pressed, this, &APlayerPawn::OnMousePressed);
-	PlayerInputComponent->BindAction("Grab", IE_Released, this, &APlayerPawn::OnMouseReleased); }
+	PlayerInputComponent->BindAction("Grab", IE_Pressed, this, &AMyPlayerPawn::OnMousePressed);
+	PlayerInputComponent->BindAction("Grab", IE_Released, this, &AMyPlayerPawn::OnMouseReleased); }
 
 
-void APlayerPawn::Tick(float DeltaTime) {
+void AMyPlayerPawn::Tick(float DeltaTime) {
 	AMyPlayerController* PlayerController;
 	UWorld*              World;
 
@@ -53,7 +52,7 @@ void APlayerPawn::Tick(float DeltaTime) {
 			DrawDebugLine(GetWorld(), StaticCamera->GetComponentLocation(), TargetPoint, FColor::Cyan, false, -1.0f, 0, 2.0f);*/ } } }
 
 
-void APlayerPawn::OnMousePressed() {
+void AMyPlayerPawn::OnMousePressed() {
 	FHitResult           HitResult;
 	UWorld*              World;
 	AMyPlayerController* PlayerController;
@@ -79,7 +78,7 @@ void APlayerPawn::OnMousePressed() {
 		else { GrabbedComponent = nullptr; } } }
 
 
-void APlayerPawn::OnMouseReleased() {
+void AMyPlayerPawn::OnMouseReleased() {
 	UE_LOG(LogTemp, Display, TEXT("MOUSE RELEASED"));
 	if (GrabbedComponent != nullptr) {
 		UE_LOG(LogTemp, Display, TEXT("OBJECT RELEASED"));

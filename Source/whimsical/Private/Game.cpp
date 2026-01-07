@@ -9,7 +9,7 @@ UGame* Game = nullptr;
 // Order of creation:
 //  * AMyGameMode
 //  * AMyPlayerController
-//  * APlayerPawn
+//  * AMyPlayerPawn
 
 
 UGame::UGame() {
