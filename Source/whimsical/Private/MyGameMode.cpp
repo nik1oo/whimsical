@@ -7,9 +7,10 @@
 
 
 AMyGameMode::AMyGameMode() {
+	UE_LOG(LogTemp, Display, TEXT("AMYGAMEMODE CONSTRUCTED."));
 	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));
+	if (Game != nullptr) { Game->GameMode = this; }
 	PlayerControllerClass = AMyPlayerController::StaticClass();
 	DefaultPawnClass = AMyPlayerPawn::StaticClass();
-	HUDClass = AMyHUD::StaticClass();
-	UE_LOG(LogTemp, Display, TEXT("Initialized custom game mode.")); }
+	HUDClass = AMyHUD::StaticClass(); }
 

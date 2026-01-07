@@ -4,5 +4,7 @@
 
 
 AMyHUD::AMyHUD() {
-	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this)); }
+	UE_LOG(LogTemp, Display, TEXT("AMYHUD CONSTRUCTED."));
+	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));
+	if (Game != nullptr) { Game->HUD = this; } }
 

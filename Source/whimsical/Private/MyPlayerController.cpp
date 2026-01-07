@@ -5,7 +5,9 @@
 
 
 AMyPlayerController::AMyPlayerController() {
+	UE_LOG(LogTemp, Display, TEXT("AMYPLAYERCONTROLLER CONSTRUCTED."));
 	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));
+	if (Game != nullptr) { Game->PlayerController = this; }
 	bShowMouseCursor = true;
 	bEnableClickEvents = true;
 	bEnableMouseOverEvents = true; }
@@ -14,8 +16,12 @@ AMyPlayerController::AMyPlayerController() {
 void AMyPlayerController::BeginPlay() {
 	ACameraActor* CameraActor;
 
+	UE_LOG(LogTemp, Display, TEXT("SETTING CAMERA."));
 	CameraActor = Cast<ACameraActor>(UGameplayStatics::GetActorOfClass(GetWorld(), ACameraActor::StaticClass()));
-	if (CameraActor) { SetViewTargetWithBlend(CameraActor, 0.0f); } }
+	if (CameraActor) {
+		SetViewTargetWithBlend(CameraActor, 0.0f); }
+	else {
+		UE_LOG(LogTemp, Display, TEXT("CANT FIND CAMERA.")); } }
 
 
 void AMyPlayerController::Tick(float DeltaSeconds) {

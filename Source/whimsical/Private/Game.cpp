@@ -13,6 +13,7 @@ UGame* Game = nullptr;
 
 
 UGame::UGame() {
+	UE_LOG(LogTemp, Display, TEXT("UGAME CONSTRUCTED."));
 	Game = this; }
 
 

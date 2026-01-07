@@ -27,7 +27,6 @@ UCLASS() class WHIMSICAL_API AMyPlayerPawn : public APawn {
 	void OnMouseReleased();
 	bool GetMouseWorldPosition(float Distance, FVector& OutWorldPos, FVector& OutWorldDir);
 	void UpdateDragTarget();
-	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override; };
 

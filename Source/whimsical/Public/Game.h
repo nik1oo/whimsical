@@ -3,6 +3,7 @@
 #include "MyGameMode.h"
 #include "MyPlayerController.h"
 #include "MyPlayerPawn.h"
+#include "MyHUD.h"
 #include "Game.generated.h"
 
 
@@ -12,6 +13,7 @@ UCLASS() class WHIMSICAL_API UGame : public UGameInstance {
 	AMyGameMode*         GameMode         = nullptr;
 	AMyPlayerController* PlayerController = nullptr;
 	AMyPlayerPawn*       PlayerPawn       = nullptr;
+	AMyHUD*              HUD              = nullptr;
 
 	UGame(); };
 

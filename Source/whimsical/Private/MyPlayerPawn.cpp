@@ -7,23 +7,15 @@
 
 
 AMyPlayerPawn::AMyPlayerPawn() {
+	UE_LOG(LogTemp, Display, TEXT("AMYPLAYERPAWN CONSTRUCTED."));
 	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));
+	if (Game != nullptr) { Game->PlayerPawn = this; }
 	PrimaryActorTick.bCanEverTick = true;
-	if (Game) { UE_LOG(LogTemp, Display, TEXT("Player Name: %s"), *Game->PlayerName); }
 /*	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = RootScene;
 	StaticCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("StaticCamera"));
 	StaticCamera->SetupAttachment(RootScene);*/
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle")); }
-
-
-void AMyPlayerPawn::BeginPlay() {
-	Super::BeginPlay();
-/*	PhysicsHandle->GrabStrength = 1000.0;
-	if (APlayerController* PC = GetController<APlayerController>()) {
-		PC->bShowMouseCursor = true;
-		PC->bEnableClickEvents = true;
-		PC->bEnableMouseOverEvents = true; } */}
 
 
 void AMyPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
