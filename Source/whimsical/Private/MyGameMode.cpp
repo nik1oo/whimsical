@@ -8,8 +8,7 @@
 
 AMyGameMode::AMyGameMode() {
 	UE_LOG(LogTemp, Display, TEXT("AMYGAMEMODE CONSTRUCTED."));
-	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));
-	if (Game != nullptr) { Game->GameMode = this; }
+	LINK_SINGLETON_WITH_UGAME(GameMode);
 	PlayerControllerClass = AMyPlayerController::StaticClass();
 	DefaultPawnClass = AMyPlayerPawn::StaticClass();
 	HUDClass = AMyHUD::StaticClass(); }

@@ -5,6 +5,5 @@
 
 AMyHUD::AMyHUD() {
 	UE_LOG(LogTemp, Display, TEXT("AMYHUD CONSTRUCTED."));
-	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));
-	if (Game != nullptr) { Game->HUD = this; } }
+	LINK_SINGLETON_WITH_UGAME(HUD); }
 

@@ -6,8 +6,7 @@
 
 AMyPlayerController::AMyPlayerController() {
 	UE_LOG(LogTemp, Display, TEXT("AMYPLAYERCONTROLLER CONSTRUCTED."));
-	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));
-	if (Game != nullptr) { Game->PlayerController = this; }
+	LINK_SINGLETON_WITH_UGAME(PlayerController);
 	bShowMouseCursor = true;
 	bEnableClickEvents = true;
 	bEnableMouseOverEvents = true; }

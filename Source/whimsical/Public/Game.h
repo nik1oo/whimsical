@@ -18,5 +18,10 @@ UCLASS() class WHIMSICAL_API UGame : public UGameInstance {
 	UGame(); };
 
 
+#define LINK_SINGLETON_WITH_UGAME(FIELD_NAME) \
+	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));\
+	if (Game != nullptr) { Game->FIELD_NAME = this; }
+
+
 UGame* ActorGetGame(AActor* Actor);
 

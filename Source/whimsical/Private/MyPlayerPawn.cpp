@@ -8,8 +8,7 @@
 
 AMyPlayerPawn::AMyPlayerPawn() {
 	UE_LOG(LogTemp, Display, TEXT("AMYPLAYERPAWN CONSTRUCTED."));
-	Game = Cast<UGame>(UGameplayStatics::GetGameInstance(this));
-	if (Game != nullptr) { Game->PlayerPawn = this; }
+	LINK_SINGLETON_WITH_UGAME(PlayerPawn);
 	PrimaryActorTick.bCanEverTick = true;
 /*	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = RootScene;
