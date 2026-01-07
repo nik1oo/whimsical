@@ -9,13 +9,25 @@
 
 UCLASS() class WHIMSICAL_API UGame : public UGameInstance {
 	GENERATED_BODY() public:
-	FString              PlayerName       = TEXT("DefaultPlayer");
-	AMyGameMode*         GameMode         = nullptr;
-	AMyPlayerController* PlayerController = nullptr;
-	AMyPlayerPawn*       PlayerPawn       = nullptr;
-	AMyHUD*              HUD              = nullptr;
+	                              FString                  PlayerName        = TEXT("DefaultPlayer");
+	                              AMyGameMode*             GameMode          = nullptr;
+	                              AMyPlayerController*     PlayerController  = nullptr;
+	                              AMyPlayerPawn*           PlayerPawn        = nullptr;
+	                              AMyHUD*                  HUD               = nullptr;
+	// (TODO): Why are these UProperties? Does this help anyhow? //
+	UPROPERTY(VisibleAnywhere)    USceneComponent*         RootScene;
+	UPROPERTY(VisibleAnywhere)    USpringArmComponent*     SpringArm;
+	UPROPERTY(VisibleAnywhere)    UCameraComponent*        StaticCamera;
+	UPROPERTY(VisibleAnywhere)    UPhysicsHandleComponent* PhysicsHandle;
+	UPROPERTY(EditAnywhere) float DragPlaneDistance = 500.0;
+	UPROPERTY()                   UPrimitiveComponent*     GrabbedComponent  = nullptr;
+	                              FVector                  DragPlaneOrigin;
+	                              FVector                  GrabPoint;
 
-	UGame(); };
+	UGame();
+	void Tick(float DeltaSeconds);
+	void OnMousePressed();
+	void OnMouseReleased(); };
 
 
 #define LINK_SINGLETON_WITH_UGAME(FIELD_NAME) \
