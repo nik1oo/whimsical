@@ -1,5 +1,5 @@
 #include "PlayerPawn.h"
-#include "State.h"
+#include "Game.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Actor.h"
@@ -8,8 +8,8 @@
 
 APlayerPawn::APlayerPawn() {
 	PrimaryActorTick.bCanEverTick = true;
-	UState* State = ActorGetState(this);
-	if (State) { UE_LOG(LogTemp, Display, TEXT("Player Name: %s"), *State->PlayerName); }
+	UGame* Game = ActorGetGame(this);
+	if (Game) { UE_LOG(LogTemp, Display, TEXT("Player Name: %s"), *Game->PlayerName); }
 /*	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = RootScene;
 	StaticCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("StaticCamera"));
