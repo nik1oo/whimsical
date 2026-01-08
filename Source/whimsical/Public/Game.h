@@ -19,15 +19,17 @@ UCLASS() class WHIMSICAL_API UGame : public UGameInstance {
 	UPROPERTY(VisibleAnywhere)    USpringArmComponent*     SpringArm;
 	UPROPERTY(VisibleAnywhere)    UCameraComponent*        StaticCamera;
 	UPROPERTY(VisibleAnywhere)    UPhysicsHandleComponent* PhysicsHandle;
-	UPROPERTY(EditAnywhere) float DragPlaneDistance = 500.0;
 	UPROPERTY()                   UPrimitiveComponent*     GrabbedComponent  = nullptr;
 	                              FVector                  DragPlaneOrigin;
-	                              FVector                  GrabPoint;
+	                              FPlane                   DragPlane;
+	                              FVector                  HandVector;
+	                              FVector                  GrabbedObjectVector;
 
 	UGame();
 	void Tick(float DeltaSeconds);
 	void OnMousePressed();
-	void OnMouseReleased(); };
+	void OnMouseReleased();
+	void MouseTrace(bool& Hit, FHitResult& HitResult); };
 
 
 #define LINK_SINGLETON_WITH_UGAME(FIELD_NAME) \
