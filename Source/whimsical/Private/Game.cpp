@@ -22,7 +22,7 @@ UGame::UGame() {
 	Game = this;
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
 	// FVector TargetPoint = FMath::RayPlaneIntersection(WorldPos, WorldDir, DragPlane);
-	DragPlaneOrigin = FVector{ 620.0, 0.0, 180.0 };
+	DragPlaneOrigin = FVector{ 50.0, 0.0, 180.0 };
 	DragPlane = FPlane(DragPlaneOrigin, FVector{ 1.0, 0.0, 0.0 }); }
 
 
@@ -54,8 +54,9 @@ void UGame::OnMousePressed() {
 				HitResult.ImpactPoint,
 				GrabbedComponent->GetComponentRotation());
 			GrabbedComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
-			// GrabbedComponent->SetEnableGravity(false);
-			}
+			GrabbedComponent->SetEnableGravity(false);
+			GrabbedComponent->SetLinearDamping(16.0);
+			GrabbedComponent->SetAngularDamping(10.0); }
 		else { GrabbedComponent = nullptr; } } }
 
 
@@ -64,17 +65,23 @@ void UGame::OnMouseReleased() {
 	if (GrabbedComponent != nullptr) {
 		UE_LOG(LogTemp, Display, TEXT("OBJECT RELEASED"));
 		GrabbedComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
+		GrabbedComponent->SetEnableGravity(true);
+		GrabbedComponent->SetLinearDamping(0.0);
+		GrabbedComponent->SetAngularDamping(0.0);
 		GrabbedComponent = nullptr;
 		PhysicsHandle->ReleaseComponent(); } }
 
 
-void PrimitiveComponentApplyDrag(UPrimitiveComponent* PrimitiveComponent, float DragCoefficient) {
-	FVector Velocity = PrimitiveComponent->GetPhysicsLinearVelocity();
-	FVector DragForce = -Velocity.GetSafeNormal();
-	if (DragForce.Size() == 0.0) { return; }
-	DragForce *= DragCoefficient * FMath::Pow(Velocity.Size(), 2.0);
-	UE_LOG(LogTemp, Display, TEXT("VELOCITY %f %f %f DRAG %f %f %f."), Velocity[0], Velocity[1], Velocity[2], DragForce[0], DragForce[1], DragForce[2]);
-	PrimitiveComponent->AddForce(DragForce, NAME_None, true); }
+float GrabForceCurve(float Distance) {
+	const float Radius = 30;
+	if (Distance < Radius) {
+		return (1.0 - FMath::Cos(Distance * 3.14159265 / Radius)) / 2.0; }
+	else {
+		return 1.0; } }
+
+
+float AlignmentForceCurve(float AlignmentError) {
+	return (4.0 / 3.14159265) * FMath::Atan(FMath::Pow(AlignmentError + 1.0, 32)) - 1.0; }
 
 
 void UGame::Tick(float DeltaTime) {
@@ -83,31 +90,24 @@ void UGame::Tick(float DeltaTime) {
 	World = GetWorld();
 	if ((World == nullptr) || (PlayerController == nullptr)) { return; }
 	HandVector = FMath::RayPlaneIntersection(PlayerController->MouseWorldPos, PlayerController->MouseWorldDir, DragPlane);
-	DrawDebugPoint(GetWorld(), HandVector, 4.0, FColor::Red);
+	DrawDebugPoint(GetWorld(), HandVector, 4.0, FColor::Green);
 	// DrawDebugPoint(GetWorld(), PlayerController->MouseWorldPos + 1000.0 * PlayerController->MouseWorldDir, 1.0, FColor::Cyan);
 	if (GrabbedComponent != nullptr) {
 		UE_LOG(LogTemp, Display, TEXT("DELTA TIME %f."), DeltaTime);
 		GrabbedObjectVector = GrabbedComponent->GetComponentLocation();
-/*		FVector WorldPos, WorldDir;
-		if (!GetMouseWorldPosition(DragPlaneDistance, WorldPos, WorldDir)) return;
-		FPlane DragPlane(StaticCamera->GetForwardVector(), DragPlaneOrigin);
-		FVector TargetPoint = FMath::RayPlaneIntersection(WorldPos, WorldDir, DragPlane);
-		PhysicsHandle->SetTargetLocation(TargetPoint);
-		DrawDebugLine(GetWorld(), StaticCamera->GetComponentLocation(), TargetPoint, FColor::Cyan, false, -1.0f, 0, 2.0f);*/
+		// Carry Force //
 		FVector ForceVector = (HandVector - GrabbedObjectVector);
 		float Distance = ForceVector.Size();
 		ForceVector.Normalize();
-		FVector Impulse = 10000.0 * DeltaTime * ForceVector/* / FMath::Pow(Distance, 2.0)*/;
+		FVector Impulse = GrabForceCurve(Distance) * 20000.0 * DeltaTime * ForceVector;
 		GrabbedComponent->AddImpulse(Impulse, NAME_None, true);
-		FVector Velocity = GrabbedComponent->GetPhysicsLinearVelocity();
-		// UE_LOG(LogTemp, Display, TEXT("DISTANCE %f."), Distance);
-		// DICK
-		// if (Distance <= 40.0) {
-			// GrabbedComponent->SetPhysicsLinearVelocity(FVector{ 0.0, 0.0, 0.0 }, false, NAME_None);
-			PrimitiveComponentApplyDrag(GrabbedComponent, 0.2); // (TODO): Tweak DragCoefficient and carry force and set accurate mass to the objects. //
-		// }
-		// GrabbedComponent->AddImpulse();
-	} }
+		// Rotation Force //
+		FVector ComponentUpVector = GrabbedComponent->GetUpVector();
+		FVector WorldUpVector = FVector::UpVector;
+		FVector TorqueAxis = FVector::CrossProduct(ComponentUpVector, WorldUpVector);
+		float AlignmentError = 1.0 - (FVector::DotProduct(ComponentUpVector, WorldUpVector) + 1.0) / 2.0;
+		if (AlignmentError > 0.001) {
+			GrabbedComponent->AddTorqueInRadians(TorqueAxis.GetSafeNormal() * 100000.0 * AlignmentForceCurve(AlignmentError)); } } }
 
 
 // (TODO): Remove this. //
