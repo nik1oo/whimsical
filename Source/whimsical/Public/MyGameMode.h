@@ -12,5 +12,6 @@ UCLASS() class WHIMSICAL_API AMyGameMode : public AGameModeBase {
 	UGame* Game;
 	// UPROPERTY(EditAnywhere, BlueprintReadOnly) TSubclassOf<APawn> CustomPawnClass;
 
-	AMyGameMode(); };
+	AMyGameMode();
+	virtual void BeginPlay() override; };
 

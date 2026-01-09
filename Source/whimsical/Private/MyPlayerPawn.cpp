@@ -16,8 +16,14 @@ AMyPlayerPawn::AMyPlayerPawn() {
 	StaticCamera->SetupAttachment(RootScene);*/ }
 
 
+void AMyPlayerPawn::BeginPlay() {
+	Super::BeginPlay();
+	UE_LOG(LogTemp, Display, TEXT("AMYPLAYERPAWN BEGINPLAY."));
+	Game->BeginPlay(); }
+
+
 void AMyPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
-	UE_LOG(LogTemp, Display, TEXT("SETTING UP PLAYER INPUT COMPONENT."));
+	UE_LOG(LogTemp, Display, TEXT("AMYPLAYERPAWN SETUPPLAYERINPUTCOMPONENT."));
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Grab", IE_Pressed, Game, &UGame::OnMousePressed);
 	PlayerInputComponent->BindAction("Grab", IE_Released, Game, &UGame::OnMouseReleased); }

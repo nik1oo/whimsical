@@ -4,28 +4,38 @@
 #include "MyPlayerController.h"
 #include "MyPlayerPawn.h"
 #include "MyHUD.h"
+#include "MyUI.h"
 #include "Game.generated.h"
 
 
 UCLASS() class WHIMSICAL_API UGame : public UGameInstance {
 	GENERATED_BODY() public:
-	                              FString                  PlayerName        = TEXT("DefaultPlayer");
-	                              AMyGameMode*             GameMode          = nullptr;
-	                              AMyPlayerController*     PlayerController  = nullptr;
-	                              AMyPlayerPawn*           PlayerPawn        = nullptr;
-	                              AMyHUD*                  HUD               = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) TSubclassOf<AGameModeBase> AMyGameModeClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) TSubclassOf<AHUD> AMyHUDClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) TSubclassOf<APlayerController> AMyPlayerControllerClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) TSubclassOf<APawn> AMyPlayerPawnClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) TSubclassOf<UUserWidget> UMyUIClass;
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite) TSubclassOf<AGameModeBase> AMyGameMode;
+	                                            FString                  PlayerName        = TEXT("DefaultPlayer");
+	                                            AMyGameMode*             GameMode          = nullptr;
+	                                            AMyPlayerController*     PlayerController  = nullptr;
+	                                            AMyPlayerPawn*           PlayerPawn        = nullptr;
+	                                            AMyHUD*                  HUD               = nullptr;
+	                                            UMyUI*                   UI                = nullptr;
 	// (TODO): Why are these UProperties? Does this help anyhow? //
-	UPROPERTY(VisibleAnywhere)    USceneComponent*         RootScene;
-	UPROPERTY(VisibleAnywhere)    USpringArmComponent*     SpringArm;
-	UPROPERTY(VisibleAnywhere)    UCameraComponent*        StaticCamera;
-	UPROPERTY(VisibleAnywhere)    UPhysicsHandleComponent* PhysicsHandle;
-	UPROPERTY()                   UPrimitiveComponent*     GrabbedComponent  = nullptr;
-	                              FVector                  DragPlaneOrigin;
-	                              FPlane                   DragPlane;
-	                              FVector                  HandVector;
-	                              FVector                  GrabbedObjectVector;
+	UPROPERTY(VisibleAnywhere)                  USceneComponent*         RootScene;
+	UPROPERTY(VisibleAnywhere)                  USpringArmComponent*     SpringArm;
+	UPROPERTY(VisibleAnywhere)                  UCameraComponent*        StaticCamera;
+	UPROPERTY(VisibleAnywhere)                  UPhysicsHandleComponent* PhysicsHandle;
+	UPROPERTY()                                 UPrimitiveComponent*     GrabbedComponent  = nullptr;
+	                                            FVector                  DragPlaneOrigin;
+	                                            FPlane                   DragPlane;
+	                                            FVector                  HandVector;
+	                                            FVector                  GrabbedObjectVector;
 
 	UGame();
+	virtual void Init() override;
+	void BeginPlay();
 	void Tick(float DeltaSeconds);
 	void OnMousePressed();
 	void OnMouseReleased();

@@ -11,5 +11,6 @@ UCLASS() class WHIMSICAL_API AMyHUD : public AHUD {
 	GENERATED_BODY() public:
 	UGame* Game;
 
-	AMyHUD(); };
+	AMyHUD();
+	virtual void BeginPlay() override; };
 

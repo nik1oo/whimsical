@@ -13,3 +13,8 @@ AMyGameMode::AMyGameMode() {
 	DefaultPawnClass = AMyPlayerPawn::StaticClass();
 	HUDClass = AMyHUD::StaticClass(); }
 
+
+void AMyGameMode::BeginPlay() {
+	Super::BeginPlay();
+	UE_LOG(LogTemp, Display, TEXT("AMYGAMEMODE BEGINPLAY.")); }
+

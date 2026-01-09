@@ -15,7 +15,8 @@ AMyPlayerController::AMyPlayerController() {
 void AMyPlayerController::BeginPlay() {
 	ACameraActor* CameraActor;
 
-	UE_LOG(LogTemp, Display, TEXT("SETTING CAMERA."));
+	Super::BeginPlay();
+	UE_LOG(LogTemp, Display, TEXT("AMYPLAYERCONTROLLER BEGINPLAY."));
 	CameraActor = Cast<ACameraActor>(UGameplayStatics::GetActorOfClass(GetWorld(), ACameraActor::StaticClass()));
 	if (CameraActor) {
 		SetViewTargetWithBlend(CameraActor, 0.0f); }

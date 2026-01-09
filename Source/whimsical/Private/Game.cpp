@@ -11,19 +11,62 @@
 UGame* Game = nullptr;
 
 
-// Order of creation:
-//  * AMyGameMode
-//  * AMyPlayerController
-//  * AMyPlayerPawn
+/*
+// In MyPlayerController.h
+UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+TSubclassOf<UUserWidget> ButtonUIClass;
+
+// In MyPlayerController.cpp constructor
+AMyPlayerController::AMyPlayerController()
+{
+	ButtonUIClass = UWMyButtonUI::StaticClass();
+}
+
+// In BeginPlay() or input binding
+void AMyPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (ButtonUIClass)
+	{
+		UUserWidget* Widget = CreateWidget<UUserWidget>(this, ButtonUIClass);
+		if (Widget)
+		{
+			Widget->AddToViewport();
+		}
+	}
+}
+*/
 
 
 UGame::UGame() {
 	UE_LOG(LogTemp, Display, TEXT("UGAME CONSTRUCTED."));
 	Game = this;
+	AMyGameModeClass = AMyGameMode::StaticClass();
+	AMyHUDClass = AMyHUD::StaticClass();
+	AMyPlayerControllerClass = AMyPlayerController::StaticClass();
+	AMyPlayerPawnClass = AMyPlayerPawn::StaticClass();
+	UMyUIClass = UMyUI::StaticClass();
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
 	// FVector TargetPoint = FMath::RayPlaneIntersection(WorldPos, WorldDir, DragPlane);
 	DragPlaneOrigin = FVector{ 50.0, 0.0, 180.0 };
 	DragPlane = FPlane(DragPlaneOrigin, FVector{ 1.0, 0.0, 0.0 }); }
+
+
+// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+// TSubclassOf<UUserWidget> ButtonUIClass;
+
+
+void UGame::Init() {
+	Super::Init();
+	UE_LOG(LogTemp, Display, TEXT("UGAME INITIALIZED.")); }
+
+
+void UGame::BeginPlay() {
+	UE_LOG(LogTemp, Display, TEXT("UGAME BEGINPLAY."));
+	UUserWidget* Widget = CreateWidget<UUserWidget>(this, UMyUIClass);
+	if (Widget) {
+		Widget->AddToViewport(); } }
 
 
 void UGame::MouseTrace(bool& Hit, FHitResult& HitResult) {
@@ -43,7 +86,7 @@ void UGame::OnMousePressed() {
 	if (Hit) {
 	// if (World->LineTraceSingleByChannel(HitResult, PlayerController->MouseWorldPos, PlayerController->MouseWorldPos + 5000.0 * PlayerController->MouseWorldDir, ECC_PhysicsBody, FCollisionQueryParams("", false, PlayerPawn))) {
 		UE_LOG(LogTemp, Display, TEXT("OBJECT HIT"));
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 2.0, 12, FColor::Red, false, 1.0f);
+		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 2.0, 12, FColor::Red, false, 1.0f);
 		GrabbedComponent = Cast<UPrimitiveComponent>(HitResult.GetComponent());
 		// UKismetSystemLibrary::DrawDebugPlane(World, DragPlane, DragPlaneOrigin, 1000.0, FColor::Cyan, 1.0, EDrawDebugSceneDepthPriorityGroup::World);
 		if (GrabbedComponent->IsSimulatingPhysics()) {
@@ -90,8 +133,7 @@ void UGame::Tick(float DeltaTime) {
 	World = GetWorld();
 	if ((World == nullptr) || (PlayerController == nullptr)) { return; }
 	HandVector = FMath::RayPlaneIntersection(PlayerController->MouseWorldPos, PlayerController->MouseWorldDir, DragPlane);
-	DrawDebugPoint(GetWorld(), HandVector, 4.0, FColor::Green);
-	// DrawDebugPoint(GetWorld(), PlayerController->MouseWorldPos + 1000.0 * PlayerController->MouseWorldDir, 1.0, FColor::Cyan);
+	// DrawDebugPoint(GetWorld(), HandVector, 4.0, FColor::Green);
 	if (GrabbedComponent != nullptr) {
 		UE_LOG(LogTemp, Display, TEXT("DELTA TIME %f."), DeltaTime);
 		GrabbedObjectVector = GrabbedComponent->GetComponentLocation();

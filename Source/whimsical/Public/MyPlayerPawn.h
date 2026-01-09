@@ -15,6 +15,7 @@ UCLASS() class WHIMSICAL_API AMyPlayerPawn : public APawn {
 	UGame* Game;
 
 	AMyPlayerPawn();
+	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override; };
 
