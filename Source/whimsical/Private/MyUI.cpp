@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Kismet/GameplayStatics.h"
 #include "SMyButtonWidget.h"
+#include "SMyFrameWidget.h"
 
 
 void UMyUI::NativeConstruct() {
@@ -10,7 +11,7 @@ void UMyUI::NativeConstruct() {
 
 
 TSharedRef<SWidget> UMyUI::RebuildWidget() {
-    return SNew(SMyButtonWidget); }
+    return SNew(SMyFrameWidget); }
 
 
 void UMyUI::ShowUI() {
